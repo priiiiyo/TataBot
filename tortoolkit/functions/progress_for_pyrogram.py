@@ -34,13 +34,11 @@ async def progress_for_pyrogram(
         return
 
     if round(diff % time_out) == 0 or current == total:
-        if cancel_msg is not None:
-            # dirty alt. was not able to find something to stop upload
-            # todo inspect with "StopAsyncIteration"
-            # IG Open stream will be Garbage Collected
-            if updb.get_cancel_status(cancel_msg.chat.id, cancel_msg.message_id):
-                print("Stopping transmission")
-                client.stop_transmission()
+        if cancel_msg is not None and updb.get_cancel_status(
+            cancel_msg.chat.id, cancel_msg.message_id
+        ):
+            print("Stopping transmission")
+            client.stop_transmission()
 
         # if round(current / total * 100, 0) % 5 == 0:
         percentage = current * 100 / total
@@ -104,8 +102,7 @@ def time_formatter(seconds: int) -> str:
     v_m = 0
     remainder = seconds
     r_ange_s = {"days": (24 * 60 * 60), "hours": (60 * 60), "minutes": 60, "seconds": 1}
-    for age in r_ange_s:
-        divisor = r_ange_s[age]
+    for age, divisor in r_ange_s.items():
         v_m, remainder = divmod(remainder, divisor)
         v_m = int(v_m)
         if v_m != 0:

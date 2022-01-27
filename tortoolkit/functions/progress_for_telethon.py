@@ -18,11 +18,10 @@ async def progress(
     now = time.time()
     diff = now - start
     if round(diff % time_out) == 0 or current == total:
-        if cancel_msg is not None:
-            # dirty alt. was not able to find something to stop upload
-            # todo inspect with "StopAsyncIteration"
-            if updb.get_cancel_status(cancel_msg.chat_id, cancel_msg.id):
-                raise Exception("cancel the upload")
+        if cancel_msg is not None and updb.get_cancel_status(
+            cancel_msg.chat_id, cancel_msg.id
+        ):
+            raise Exception("cancel the upload")
 
         # if round(current / total * 100, 0) % 5 == 0:
         percentage = current * 100 / total
@@ -39,7 +38,10 @@ async def progress(
 
         progress = "[{0}{1}] \nP: {2}%\n".format(
             "".join(
-                [get_val("COMPLETED_STR") for i in range(math.floor(percentage / 5))]
+                [
+                    get_val("COMPLETED_STR")
+                    for _ in range(math.floor(percentage / 5))
+                ]
             ),
             "".join(
                 [
@@ -49,6 +51,7 @@ async def progress(
             ),
             round(percentage, 2),
         )
+
 
         tmp = progress + "{0} of {1}\nSpeed: {2}/s\nETA: {3}\n".format(
             human_readable_bytes(current),
@@ -64,6 +67,4 @@ async def progress(
                 await message.edit(caption="{}\n {}".format(file_name, tmp))
         except Exception as e:
             logging.error(e)
-        return
-    else:
-        return
+    return

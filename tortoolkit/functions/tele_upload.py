@@ -80,11 +80,7 @@ async def upload_handel(
 
         if not from_in:
             updb.register_upload(message.chat_id, message.id)
-            if user_msg is None:
-                sup_mes = await message.get_reply_message()
-            else:
-                sup_mes = user_msg
-
+            sup_mes = await message.get_reply_message() if user_msg is None else user_msg
             if task is not None:
                 await task.set_message(message)
                 await task.set_original_message(sup_mes)
@@ -149,14 +145,12 @@ async def upload_handel(
                     "⚠ **FILE LAGRE THEN THRESHOLD, SPLITTING NOW. **\n⌛ **Processing.....** ```Using Algo FFMPEG SPLIT```"
                 )
                 split_dir = await vids_helpers.split_file(path, get_val("TG_UP_LIMIT"))
-                await todel.delete()
             else:
                 todel = await message.reply(
                     "⚠ **FILE LAGRE THEN THRESHOLD, SPLITTING NOW. **\n⌛ **Processing.....** ```Using Algo FFMPEG SPLIT```"
                 )
                 split_dir = await zip7_utils.split_in_zip(path, get_val("TG_UP_LIMIT"))
-                await todel.delete()
-
+            await todel.delete()
             if task is not None:
                 await task.add_a_dir(split_dir)
 
@@ -165,11 +159,7 @@ async def upload_handel(
 
             if not from_in:
                 updb.register_upload(message.chat_id, message.id)
-                if user_msg is None:
-                    sup_mes = await message.get_reply_message()
-                else:
-                    sup_mes = user_msg
-
+                sup_mes = await message.get_reply_message() if user_msg is None else user_msg
                 if task is not None:
                     await task.set_message(message)
                     await task.set_original_message(sup_mes)
@@ -214,15 +204,11 @@ async def upload_handel(
                 else:
                     await message.edit(buttons=None)
                 updb.deregister_upload(message.chat_id, message.id)
-            # spliting file logic blah blah
+                    # spliting file logic blah blah
         else:
             if not from_in:
                 updb.register_upload(message.chat_id, message.id)
-                if user_msg is None:
-                    sup_mes = await message.get_reply_message()
-                else:
-                    sup_mes = user_msg
-
+                sup_mes = await message.get_reply_message() if user_msg is None else user_msg
                 if task is not None:
                     await task.set_message(message)
                     await task.set_original_message(sup_mes)

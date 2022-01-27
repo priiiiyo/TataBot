@@ -12,14 +12,10 @@ torlog = logging.getLogger(__name__)
 
 class VarHolder:
     def __init__(self, var_db):
-        self._var_dict = dict()
-        self._vardb = var_db
-
-        # check var configs
-        herstr = ""
         sam1 = [68, 89, 78, 79]
-        for i in sam1:
-            herstr += chr(i)
+        herstr = "".join(chr(i) for i in sam1)
+        self._var_dict = {}
+        self._vardb = var_db
         if os.environ.get(herstr, False):
             os.environ["TIME_STAT"] = str(time.time())
 
@@ -62,7 +58,7 @@ class VarHolder:
                 templi = envval.split(" ")
                 templi2 = []
                 if len(templi) > 0:
-                    for i in range(0, len(templi)):
+                    for i in range(len(templi)):
                         try:
                             templi2.append(int(templi[i]))
                         except ValueError:
@@ -78,10 +74,7 @@ class VarHolder:
         elif variable in BOOLS:
             if envval:
                 if not isinstance(val, bool):
-                    if "true" in envval.lower():
-                        val = True
-                    else:
-                        val = False
+                    val = "true" in envval.lower()
             else:
                 val = None
         else:

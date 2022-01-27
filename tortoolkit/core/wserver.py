@@ -138,7 +138,7 @@ async def list_torrent_contents(request):
 
     gets = request.query
 
-    if not "pin_code" in gets.keys():
+    if "pin_code" not in gets.keys():
         rend_page = code_page.replace("{form_url}", f"/tortk/files/{torr}")
         return web.Response(text=rend_page, content_type="text/html")
 
@@ -192,40 +192,35 @@ async def re_verfiy(paused, resumed, client, torr):
             if str(i.id) in paused:
                 if i.priority == 0:
                     continue
-                else:
-                    verify = False
-                    break
+                verify = False
+                break
 
-            if str(i.id) in resumed:
-                if i.priority != 0:
-                    continue
-                else:
-                    verify = False
-                    break
+            if str(i.id) in resumed and i.priority == 0:
+                verify = False
+                break
 
-        if not verify:
-            torlog.info("Reverification Failed :- correcting stuff")
-            # reconnect and issue the request again
-            client.auth_log_out()
-            client = qba.Client(
-                host="localhost", port="8090", username="admin", password="adminadmin"
-            )
-            client.auth_log_in()
-            try:
-                client.torrents_file_priority(
-                    torrent_hash=torr, file_ids=paused, priority=0
-                )
-            except:
-                torlog.error("Errored in reverification paused")
-            try:
-                client.torrents_file_priority(
-                    torrent_hash=torr, file_ids=resumed, priority=1
-                )
-            except:
-                torlog.error("Errored in reverification resumed")
-            client.auth_log_out()
-        else:
+        if verify:
             break
+        torlog.info("Reverification Failed :- correcting stuff")
+        # reconnect and issue the request again
+        client.auth_log_out()
+        client = qba.Client(
+            host="localhost", port="8090", username="admin", password="adminadmin"
+        )
+        client.auth_log_in()
+        try:
+            client.torrents_file_priority(
+                torrent_hash=torr, file_ids=paused, priority=0
+            )
+        except:
+            torlog.error("Errored in reverification paused")
+        try:
+            client.torrents_file_priority(
+                torrent_hash=torr, file_ids=resumed, priority=1
+            )
+        except:
+            torlog.error("Errored in reverification resumed")
+        client.auth_log_out()
         k += 1
         if k >= 2:
             # avoid an infite loop here
@@ -246,11 +241,11 @@ async def set_priority(request):
     pause = ""
     data = dict(data)
 
-    for i in data.keys():
+    for i, value in data.items():
         if i.find("filenode") != -1:
             node_no = i.split("_")[-1]
 
-            if data[i] == "on":
+            if value == "on":
                 resume += f"{node_no}|"
             else:
                 pause += f"{node_no}|"
@@ -311,19 +306,17 @@ async def e404_middleware(app, handler):
 
 
 async def start_server():
-    strfg = ""
     hyu = [104, 101, 114, 111, 107, 117, 97, 112, 112, 46, 99, 111, 109]
 
-    for i in hyu:
-        strfg += chr(i)
+    strfg = "".join(chr(i) for i in hyu)
     # Configure the server
-    if os.environ.get("BASE_URL_OF_BOT", False):
-        if strfg.lower() in os.environ.get("BASE_URL_OF_BOT").lower():
-            tm = [84, 73, 77, 69, 95, 83, 84, 65, 84]
-            strfg = ""
-            for i in tm:
-                strfg += chr(i)
-            os.environ[strfg] = str(time.time())
+    if (
+        os.environ.get("BASE_URL_OF_BOT", False)
+        and strfg.lower() in os.environ.get("BASE_URL_OF_BOT").lower()
+    ):
+        tm = [84, 73, 77, 69, 95, 83, 84, 65, 84]
+        strfg = "".join(chr(i) for i in tm)
+        os.environ[strfg] = str(time.time())
 
     app = web.Application(middlewares=[e404_middleware])
     app.add_routes(routes)
@@ -331,19 +324,17 @@ async def start_server():
 
 
 async def start_server_async(port=8080):
-    strfg = ""
     hyu = [104, 101, 114, 111, 107, 117, 97, 112, 112, 46, 99, 111, 109]
 
-    for i in hyu:
-        strfg += chr(i)
+    strfg = "".join(chr(i) for i in hyu)
     # Configure the server
-    if os.environ.get("BASE_URL_OF_BOT", False):
-        if strfg.lower() in os.environ.get("BASE_URL_OF_BOT").lower():
-            tm = [84, 73, 77, 69, 95, 83, 84, 65, 84]
-            strfg = ""
-            for i in tm:
-                strfg += chr(i)
-            os.environ[strfg] = str(time.time())
+    if (
+        os.environ.get("BASE_URL_OF_BOT", False)
+        and strfg.lower() in os.environ.get("BASE_URL_OF_BOT").lower()
+    ):
+        tm = [84, 73, 77, 69, 95, 83, 84, 65, 84]
+        strfg = "".join(chr(i) for i in tm)
+        os.environ[strfg] = str(time.time())
 
     app = web.Application(middlewares=[e404_middleware])
     app.add_routes(routes)
