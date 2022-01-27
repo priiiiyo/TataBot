@@ -297,13 +297,9 @@ async def handle_leech_command(e):
         ):
             await check_link(e, rclone, is_zip, is_ext)
         elif rclone and not get_val("RCLONE_ENABLED"):
-            await e.reply(
-                "<b>DRIVE IS DISABLED BY THE ADMIN</b>", parse_mode="html"
-            )
+            await e.reply("<b>DRIVE IS DISABLED BY THE ADMIN</b>", parse_mode="html")
         else:
-            await e.reply(
-                "<b>TG LEECH IS DISABLED BY THE ADMIN</b>", parse_mode="html"
-            )
+            await e.reply("<b>TG LEECH IS DISABLED BY THE ADMIN</b>", parse_mode="html")
 
 
 async def get_leech_choice(e, timestamp):
@@ -612,9 +608,9 @@ async def set_password_zip(message):
         print(passdata[0])
         if str(message.sender_id) == passdata[0]:
             message.client.dl_passwords[int(data[1])][1] = data[2]
-            await message.reply('Password updated successfully.')
+            await message.reply("Password updated successfully.")
         else:
-            await message.reply('Cannot update the password this is not your download.')
+            await message.reply("Cannot update the password this is not your download.")
 
 
 async def start_handler(event):

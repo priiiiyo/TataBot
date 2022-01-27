@@ -18,20 +18,20 @@ torlog = logging.getLogger(__name__)
 
 async def aria_start():
     aria2_daemon_start_cmd = [
-        'aria2c',
-        '--daemon=true',
-        '--enable-rpc',
-        '--disk-cache=0',
-        '--follow-torrent=false',
-        '--max-connection-per-server=10',
-        '--min-split-size=10M',
-        '--rpc-listen-all=true',
-        '--rpc-listen-port=8100',
-        '--rpc-max-request-size=1024M',
-        '--seed-ratio=0.0',
-        '--seed-time=1',
-        '--split=10',
-        '--bt-stop-timeout=100',
+        "aria2c",
+        "--daemon=true",
+        "--enable-rpc",
+        "--disk-cache=0",
+        "--follow-torrent=false",
+        "--max-connection-per-server=10",
+        "--min-split-size=10M",
+        "--rpc-listen-all=true",
+        "--rpc-listen-port=8100",
+        "--rpc-max-request-size=1024M",
+        "--seed-ratio=0.0",
+        "--seed-time=1",
+        "--split=10",
+        "--bt-stop-timeout=100",
     ]
 
     #
@@ -81,9 +81,7 @@ def add_torrent(aria_instance, torrent_file_path):
     except Exception as e:
         return (
             False,
-            "**FAILED** \n"
-            + str(e)
-            + " \nPlease do not send SLOW links. Read /help",
+            "**FAILED** \n" + str(e) + " \nPlease do not send SLOW links. Read /help",
         )
     else:
         return True, "" + download.gid + ""
@@ -238,7 +236,7 @@ async def check_progress_for_dl(
         if " not found" in str(e) or "'file'" in str(e):
             return False, "The Download was canceled."
         torlog.warning(str(e))
-        return False, f'Error: {e}'
+        return False, f"Error: {e}"
 
 
 async def remove_dl(gid):

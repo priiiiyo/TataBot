@@ -240,7 +240,7 @@ async def get_glink(drive_name, drive_base, ent_name, conf_path, isdir=True):
     filter_path = os.path.join(os.getcwd(), str(time.time()).replace(".", "") + ".txt")
     with open(filter_path, "w", encoding="UTF-8") as file:
         file.write(f"+ {ent_name}\n")
-        file.write('- *')
+        file.write("- *")
 
     if isdir:
         if get_val("RSTUFF"):
@@ -318,11 +318,7 @@ async def get_config():
     # this car requires to access the blob
 
     config = get_val("RCLONE_CONFIG")
-    if (
-        config is not None
-        and isinstance(config, str)
-        and os.path.exists(config)
-    ):
+    if config is not None and isinstance(config, str) and os.path.exists(config):
         return config
 
     db = var_db

@@ -287,7 +287,7 @@ async def general_input_manager(
             await handle_user_settings(
                 mmes,
                 True,
-                '<b><u>Confirm timed out [waited 60s for input].</b></u>',
+                "<b><u>Confirm timed out [waited 60s for input].</b></u>",
                 sub_menu,
                 sender_id=sender_id,
             )
@@ -307,7 +307,7 @@ async def general_input_manager(
                         raise ValueError("Invalid value from bool")
 
                 if var_name == "RCLONE_CONFIG":
-                        # adjust the special case
+                    # adjust the special case
                     try:
                         conf = configparser.ConfigParser()
                         conf.read(value)
@@ -326,7 +326,7 @@ async def general_input_manager(
                         await handle_user_settings(
                             mmes,
                             True,
-                            '<b><u>The conf file is invalid check logs.</b></u>',
+                            "<b><u>The conf file is invalid check logs.</b></u>",
                             sub_menu,
                         )
 
@@ -347,7 +347,7 @@ async def general_input_manager(
                         await handle_user_settings(
                             mmes,
                             True,
-                            '<b><u>Error in the thumbnail you sent.</b></u>',
+                            "<b><u>Error in the thumbnail you sent.</b></u>",
                             sub_menu,
                         )
 
@@ -376,7 +376,7 @@ async def general_input_manager(
             await handle_user_settings(
                 mmes,
                 True,
-                '<b><u>Confirm differed by user.</b></u>',
+                "<b><u>Confirm differed by user.</b></u>",
                 sub_menu,
                 sender_id=sender_id,
             )
@@ -385,7 +385,7 @@ async def general_input_manager(
         await handle_user_settings(
             mmes,
             True,
-            '<b><u>Entry Timed out [waited 60s for input]. OR else ignored.</b></u>',
+            "<b><u>Entry Timed out [waited 60s for input]. OR else ignored.</b></u>",
             sub_menu,
             sender_id=sender_id,
         )
